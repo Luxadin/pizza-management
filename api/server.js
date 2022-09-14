@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // connect to the database
-mongoose.connect("mongodb+srv://pizza:pizza@cluster0.tgoasdj.mongodb.net/?authMechanism=DEFAULT", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://pizza:pizza@cluster0.tgoasdj.mongodb.net/pizza?authMechanism=DEFAULT", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -24,5 +24,83 @@ app.get('/', (req, res) =>{
     res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
 })
 
-const port = process.env.PORT || 3000
-app.listen(port, () => console.log("Server started on port ${port}..."));
+const {Topping, Pizza} = require ('./models/Models');
+
+// Topping Handlers
+
+// get list of toppings in database
+app.get('/toppings', async (req, res) => {
+    const toppings = await Topping.find();
+
+    res.json(toppings);
+});
+
+// create new toppings
+
+app.post('/toppings/new', (req, res) => {
+    const topping = new Topping({
+        name: req.body.name
+    });
+
+    //error checking to see if topping already exists
+    topping.save((err, topping) => {
+        if(err) return res.json(err);
+        res.send(`Topping ${topping.name} created!`);
+    });
+})
+
+//delete existing toppings
+
+app.delete('/toppings/delete/:id', async (req, res) =>{
+    const result = await Topping.findByIdAndDelete(req.params.id);
+    res.json(result);
+})
+
+// edit names of existing toppings based on id
+
+app.post('/toppings/edit/:id', async (req, res) =>{
+    const result = await Topping.findByIdAndUpdate(req.params.id, { name: req.body.name })
+    res.json(result);
+})
+
+// Pizza Handlers
+
+// get list of pizzas in database
+app.get('/pizzas', async (req, res) => {
+    const pizzas = await Pizza.find();
+
+    res.json(pizzas);
+});
+
+// create new pizza
+
+app.post('/pizza/new', (req, res) => {
+    const pizza = new Pizza({
+        toppings: req.body.toppings
+    });
+
+    //error checking to see if topping already exists
+    pizza.save((err, pizza) => {
+        if(err) return res.json(err);
+        res.send(`Topping ${pizza.toppings} created!`);
+    });
+})
+
+//delete existing pizzas
+
+app.delete('/pizza/delete/:id', async (req, res) =>{
+    const result = await Pizza.findByIdAndDelete(req.params.id);
+    res.json(result);
+})
+
+// edit names of existing toppings based on id
+
+app.post('/pizza/edit/:id', async (req, res) =>{
+    const result = await Topping.findByIdAndUpdate(req.params.id, { toppings: req.body.toppings })
+    res.json(result);
+})
+
+// Port will default to 3000 but if occupied on Heroku, it will give a random port.
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server started on port ${port}...`));
