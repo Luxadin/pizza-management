@@ -19,10 +19,10 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://pizza:pizza@cluster0.
 
 // redirects requests back to index.html
 
-app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+/*app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.get('/', (req, res) =>{
     res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
-})
+})*/
 
 const {Topping, Pizza} = require ('./models/Models');
 
@@ -45,7 +45,7 @@ app.post('/toppings/new', (req, res) => {
     //error checking to see if topping already exists
     topping.save((err, topping) => {
         if(err) return res.json(err);
-        res.send(`Topping ${topping.name} created!`);
+        res.json(topping);
     });
 })
 
@@ -82,7 +82,7 @@ app.post('/pizza/new', (req, res) => {
     //error checking to see if topping already exists
     pizza.save((err, pizza) => {
         if(err) return res.json(err);
-        res.send(`Topping ${pizza.toppings} created!`);
+        res.json(pizza);
     });
 })
 
