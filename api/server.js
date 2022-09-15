@@ -19,10 +19,10 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://pizza:pizza@cluster0.
 
 // redirects requests back to index.html
 
-/*app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.get('/', (req, res) =>{
     res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
-})*/
+})
 
 const {Topping, Pizza} = require ('./models/Models');
 
