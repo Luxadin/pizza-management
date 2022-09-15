@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-const API_BASE = process.env.API_BASE || "http://localhost:3000";
+const API_BASE = "https://pizzamanagement.herokuapp.com";
 
 function App() {
 
