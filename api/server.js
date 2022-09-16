@@ -30,7 +30,7 @@ const {Topping, Pizza} = require ('./models/Models');
 
 // get list of toppings in database
 app.get('/toppings', async (req, res) => {
-    const toppings = await Topping.find();
+    const toppings = await Topping.find().sort({"name" : 1});
 
     res.json(toppings);
 });
@@ -44,7 +44,7 @@ app.post('/toppings/new', (req, res) => {
 
     //error checking to see if topping already exists
     topping.save((err, topping) => {
-        if(err) return res.json(err);
+        if(err) return res.statusCode = 400;
         res.json(topping);
     });
 })
@@ -73,15 +73,24 @@ app.get('/pizzas', async (req, res) => {
 });
 
 // create new pizza
+// BUG: Add Pizza call hangs on error
 
 app.post('/pizza/new', (req, res) => {
-    const pizza = new Pizza({
-        toppings: req.body.toppings
+    let check = '';
+    req.body.toppings.forEach(element => {
+        check += element;
     });
 
-    //error checking to see if topping already exists
+    const pizza = new Pizza({
+        toppings: req.body.toppings,
+        checkString : check
+    });
+    console.log(pizza);
+    //error checking to see if pizza already exists
     pizza.save((err, pizza) => {
-        if(err) return res.json(err);
+        if(err) {
+            return res.statusCode = 400;
+        }
         res.json(pizza);
     });
 })
@@ -96,7 +105,7 @@ app.delete('/pizza/delete/:id', async (req, res) =>{
 // edit names of existing toppings based on id
 
 app.post('/pizza/edit/:id', async (req, res) =>{
-    const result = await Topping.findByIdAndUpdate(req.params.id, { toppings: req.body.toppings })
+    const result = await Pizza.findByIdAndUpdate(req.params.id, { toppings: req.body.toppings })
     res.json(result);
 })
 

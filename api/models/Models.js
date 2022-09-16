@@ -14,6 +14,11 @@ const PizzaSchema = new Schema({
     toppings: {
         type: Array,
         required: true,
+        lowercase: true
+    },
+    checkString : {
+        type: String,
+        required: true,
         unique: true,
         lowercase: true
     }
