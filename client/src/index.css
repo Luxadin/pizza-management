@@ -20,7 +20,7 @@ h1 {
     margin-bottom:32px;
 }
 
-h4{
+h2{
     font-size: 18px;
     color:blanchedalmond;
     text-transform: uppercase;
@@ -138,7 +138,6 @@ h4{
     padding: 5%;
     margin: 5px 5px 5px 5px;
     color: whitesmoke;
-    background-color: rgb(212, 94, 94);
     border-radius: 10%;
 
     display: flex;
@@ -148,4 +147,9 @@ h4{
 
 .choice:active{
     background-color: rgb(185, 142, 142);
+}
+
+.topping-list{
+    position: absolute;
+    padding-left: 10%;
 }

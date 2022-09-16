@@ -11,6 +11,12 @@ const ToppingSchema = new Schema({
 })
 
 const PizzaSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true
+    },
     toppings: {
         type: Array,
         required: true,

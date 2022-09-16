@@ -44,8 +44,14 @@ app.post('/toppings/new', (req, res) => {
 
     //error checking to see if topping already exists
     topping.save((err, topping) => {
-        if(err) return res.statusCode = 400;
-        res.json(topping);
+        if(err) {
+            res.statusCode = 400;
+            res.send(JSON.stringify({errMessage : 'Error: Duplicate'}))
+        }
+        else{
+            res.json(topping);
+            //res.send('Successfully created')
+        }
     });
 })
 
@@ -73,7 +79,6 @@ app.get('/pizzas', async (req, res) => {
 });
 
 // create new pizza
-// BUG: Add Pizza call hangs on error
 
 app.post('/pizza/new', (req, res) => {
     let check = '';
@@ -82,14 +87,17 @@ app.post('/pizza/new', (req, res) => {
     });
 
     const pizza = new Pizza({
+        name : req.body.name,
         toppings: req.body.toppings,
         checkString : check
     });
     console.log(pizza);
+    
     //error checking to see if pizza already exists
     pizza.save((err, pizza) => {
         if(err) {
-            return res.statusCode = 400;
+            res.statusCode = 400;
+            res.send(JSON.stringify({errMessage : 'Error: Duplicate'}))
         }
         res.json(pizza);
     });
@@ -105,7 +113,15 @@ app.delete('/pizza/delete/:id', async (req, res) =>{
 // edit names of existing toppings based on id
 
 app.post('/pizza/edit/:id', async (req, res) =>{
-    const result = await Pizza.findByIdAndUpdate(req.params.id, { toppings: req.body.toppings })
+    let check = '';
+    req.body.toppings.forEach(element => {
+        check += element;
+    });
+
+    const result = await Pizza.findByIdAndUpdate(req.params.id, { 
+        name: req.body.name,
+        toppings: req.body.toppings, 
+        checkString : check })
     res.json(result);
 })
 
