@@ -87,11 +87,13 @@ function ToppingList() {
   const exitEditClick = () => {
     setErrorMessage(false);
     setEditPopupActive(false);
+    setNewTopping('');
   }
 
   const exitAddClick = () => {
     setErrorMessage(false);
     setAddPopupActive(false);
+    setNewTopping('');
   }
 
   const startAdd = () =>{

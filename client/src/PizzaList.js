@@ -117,13 +117,15 @@ function PizzaList() {
   const exitEditClick = () => {
     setErrorMessage(false);
     setEditPopupActive(false);
+    setNewPizzaToppings([]);
+    setNewPizzaName('');
   }
 
   const exitAddClick = () => {
     setErrorMessage(false);
+    setAddPopupActive(false);
     setNewPizzaToppings([]);
     setNewPizzaName('');
-    setAddPopupActive(false);
   }
 
   const startAdd = () =>{
