@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
-const API_BASE = "https://pizzamanagement.herokuapp.com";
-//onst API_BASE = "http://localhost:3000"
+const API_BASE = 'https://pizzamanagement.herokuapp.com';
+//const API_BASE = 'http://localhost:3000'
 
 function ToppingList() {
 
@@ -8,12 +8,12 @@ function ToppingList() {
   const [addPopupActive, setAddPopupActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
   const [editPopupActive, setEditPopupActive] = useState(false);
-  const [newTopping, setNewTopping] = useState("");
-  const [activeTopping, setActiveTopping] = useState("");
+  const [newTopping, setNewTopping] = useState('');
+  const [activeTopping, setActiveTopping] = useState('');
 
   useEffect(() =>{
     getToppings();
-    document.title = "Topping Management"
+    document.title = 'Topping Management'
   }, [])
 
 // Actively get the toppings from the database
@@ -22,13 +22,13 @@ function ToppingList() {
     fetch(API_BASE + '/toppings')
     .then(res => res.json())
     .then(data => setToppings(data))
-    .catch(err => console.error("Error: ", err));
+    .catch(err => console.error('Error: ', err));
   }
 
 // Add a brand new topping to the list
 
   const addTopping = async() =>{
-    const data = await fetch(API_BASE + "/toppings/new/", {
+    const data = await fetch(API_BASE + '/toppings/new/', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -50,13 +50,13 @@ function ToppingList() {
       setErrorMessage(false);
       setToppings([...toppings, data]);
       setAddPopupActive(false);
-      setNewTopping("");
+      setNewTopping('');
     }
     console.log(errorMessage);
   }
 
   const deleteTopping = async id => {
-    const data = await fetch(API_BASE + "/toppings/delete/" + id, {
+    const data = await fetch(API_BASE + '/toppings/delete/' + id, {
       method: "DELETE"
     }).then (res => res.json());
 
@@ -64,7 +64,7 @@ function ToppingList() {
   }
 
   const editTopping = async topping =>{
-    const data = await fetch(API_BASE + "/toppings/edit/" + topping._id, {
+    const data = await fetch(API_BASE + '/toppings/edit/' + topping._id, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -94,36 +94,42 @@ function ToppingList() {
     setAddPopupActive(false);
   }
 
+  const startAdd = () =>{
+    setAddPopupActive(true);
+    setEditPopupActive(false);
+  }
+
   const startEdit = id =>{
     setActiveTopping(id);
+    setAddPopupActive(false);
     setEditPopupActive(true);
   }
 
   return (
-    <div className="App">
+    <div className='App'>
       <h1>Welcome, Pizza Manager!</h1>
       <h2>Your Toppings</h2>
 
-      <div className = "toppings">
+      <div className='toppings'>
         {(toppings.map(topping => (        
-          <div className ="list" key={topping._id}>
-            <div className = "name">{topping.name}</div>
-            <div className = "btn-edit" onClick={() => startEdit(topping)}>Edit</div>
-            <div className = "btn-delete" onClick={() => deleteTopping(topping._id)}>Delete</div>
+          <div className='list' key={topping._id}>
+            <div className='name'>{topping.name}</div>
+            <div className='btn-edit' onClick={() => startEdit(topping)}>Edit</div>
+            <div className='btn-delete' onClick={() => deleteTopping(topping._id)}>Delete</div>
           </div>)))}
       </div>
 
-      <div className='addPopup' onClick={() => setAddPopupActive(true)}>+</div>
+      <div className='addPopup' onClick={startAdd}>+</div>
 
       {addPopupActive ? (
-        <div className="popup">
+        <div className='popup'>
           <div className='closePopup' onClick={exitAddClick}>x</div>
             <div className='content'>
               <h3>Add Topping</h3>
               <div className='ErrorMessage'>{errorMessage ? 'Error: Duplicate or Empty String' : ''}</div>
               <input
-                type="text"
-                className="add-topping-input"
+                type='text'
+                className='add-topping-input'
                 onChange={e => setNewTopping(e.target.value)}
                 value={newTopping}/>
                 <div className='button' onClick={addTopping}>Create Topping</div>
@@ -132,14 +138,14 @@ function ToppingList() {
       ): ''}
 
       {editPopupActive ? (
-        <div className="popup">
+        <div className='popup'>
           <div className='closePopup' onClick={exitEditClick}>x</div>
             <div className='content'>
               <h3>Edit Topping</h3>
               <div className='ErrorMessage'>{errorMessage ? 'Error: Duplicate or Empty String' : ''}</div>
               <input
-                type="text"
-                className="edit-topping-input"
+                type='text'
+                className='edit-topping-input'
                 onChange={e => setNewTopping(e.target.value)}
                 value={newTopping}/>
                 <div className='button' onClick={() => editTopping(activeTopping)}>Edit Topping</div>
