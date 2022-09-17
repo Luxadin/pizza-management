@@ -65,8 +65,20 @@ app.delete('/toppings/delete/:id', async (req, res) =>{
 // edit names of existing toppings based on id
 
 app.post('/toppings/edit/:id', async (req, res) =>{
-    const result = await Topping.findByIdAndUpdate(req.params.id, { name: req.body.name })
-    res.json(result);
+
+    Topping.findByIdAndUpdate(req.params.id, 
+        { name: req.body.name }, 
+        {runValidators:true}, 
+        function(err){
+        if(err){
+            res.statusCode = 400;
+            res.send(JSON.stringify({errMessage : 'Error: Duplicate'}))
+        }
+        else{
+            res.send(JSON.stringify({errMessage : 'Success!'}))
+        }
+    })
+
 })
 
 // Pizza Handlers
@@ -91,8 +103,7 @@ app.post('/pizza/new', (req, res) => {
         toppings: req.body.toppings,
         checkString : check
     });
-    console.log(pizza);
-    
+
     //error checking to see if pizza already exists
     pizza.save((err, pizza) => {
         if(err) {
@@ -118,11 +129,21 @@ app.post('/pizza/edit/:id', async (req, res) =>{
         check += element;
     });
 
-    const result = await Pizza.findByIdAndUpdate(req.params.id, { 
+    Pizza.findByIdAndUpdate(req.params.id, { 
         name: req.body.name,
         toppings: req.body.toppings, 
-        checkString : check })
-    res.json(result);
+        checkString : check }, 
+        {runValidators:true}, 
+        function(err){
+
+        if(err){
+            res.statusCode = 400;
+            res.send(JSON.stringify({errMessage : 'Error: Duplicate'}))
+        }
+        else{
+            res.send(JSON.stringify({errMessage : 'Success!'}))
+        }
+    })
 })
 
 // Port will default to 3000 but if occupied on Heroku, it will give a random port.

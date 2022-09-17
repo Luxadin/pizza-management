@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 const API_BASE = "https://pizzamanagement.herokuapp.com";
-//const API_BASE = "http://localhost:3000"
+//onst API_BASE = "http://localhost:3000"
 
 function ToppingList() {
 
@@ -64,7 +64,7 @@ function ToppingList() {
   }
 
   const editTopping = async topping =>{
-    await fetch(API_BASE + "/toppings/edit/" + topping._id, {
+    const data = await fetch(API_BASE + "/toppings/edit/" + topping._id, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -73,11 +73,15 @@ function ToppingList() {
         name: newTopping
       })
     }).then (res => res.json());
-
-    await getToppings();
-
+    
+    if(data.errMessage === 'Error: Duplicate'){
+      setErrorMessage(true);
+    }
+    else{
     setErrorMessage(false);
     setEditPopupActive(false);
+    await getToppings();
+    }
   }
 
   const exitEditClick = () => {

@@ -14,21 +14,21 @@ function PizzaList() {
   const [activePizza, setActivePizza] = useState("");
 
   useEffect(() =>{
-    GetPizzas();
-    GetToppings();
+    getPizzas();
+    getToppings();
     document.title = "Pizza Management"
   }, [])
 
 // Actively get the toppings from the database
 
-  const GetPizzas = () => {
+  const getPizzas = () => {
     fetch(API_BASE + '/pizzas')
     .then(res => res.json())
     .then(data => setPizzas(data))
     .catch(err => console.error("Error: ", err));
   }
 
-  const GetToppings = () => {
+  const getToppings = () => {
     fetch(API_BASE + '/toppings')
     .then(res => res.json())
     .then(data => setToppings(data))
@@ -53,10 +53,8 @@ function PizzaList() {
     .then(res=>res.json())
     .catch();
 
-    const response = data;
-
     //check if it's an error, if not then add the pizza to the database
-    if(response.errMessage === 'Error: Duplicate'){
+    if(data.errMessage === 'Error: Duplicate'){
       setErrorMessage(true);
     }
     else{
@@ -76,19 +74,8 @@ function PizzaList() {
     setPizzas(pizzas => pizzas.filter(pizzas => pizzas._id !== data._id));
   }
 
-  const handleCheck = (e) => {
-    if(e.target.checked){
-      setNewPizzaToppings([...newPizzaToppings, e.target.value]);
-      console.log(newPizzaToppings);
-    }
-    else{
-      setNewPizzaToppings(newPizzaToppings => newPizzaToppings.filter(newPizzaToppings => newPizzaToppings !== e.target.value));
-      console.log(newPizzaToppings);
-    }
-  }
-
   const editPizza = async pizza =>{
-    await fetch(API_BASE + "/pizza/edit/" + pizza._id, {
+    const data = await fetch(API_BASE + "/pizza/edit/" + pizza._id, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -99,10 +86,26 @@ function PizzaList() {
       })
     }).then (res => res.json());
 
-    await GetPizzas();
 
+    if(data.errMessage === 'Error: Duplicate'){
+      setErrorMessage(true);
+    }
+    else{
     setErrorMessage(false);
     setEditPopupActive(false);
+    await getPizzas();
+    }
+  }
+
+  const handleCheck = (e) => {
+    if(e.target.checked){
+      setNewPizzaToppings([...newPizzaToppings, e.target.value]);
+      console.log(newPizzaToppings);
+    }
+    else{
+      setNewPizzaToppings(newPizzaToppings => newPizzaToppings.filter(newPizzaToppings => newPizzaToppings !== e.target.value));
+      console.log(newPizzaToppings);
+    }
   }
 
   const exitEditClick = () => {
