@@ -145,11 +145,18 @@ h2{
     justify-content: center;
 }
 
+
 .choice:active{
     background-color: rgb(185, 142, 142);
 }
 
 .topping-list{
-    position: absolute;
-    padding-left: 5%;
+    display: block;
+    margin-left: 5%;
+    text-align: left;
+}
+
+.pizza .list{
+    display: grid;
+    grid-column: 1fr 2fr 3fr;
 }
