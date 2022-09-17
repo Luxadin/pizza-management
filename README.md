@@ -1,7 +1,11 @@
 # Pizza Management App
 
 This project was created using MERN - MongoDB, Express, React, Node.js.
-It has been deployed online and can be accessed through [Heroku](https://pizzamanagement.herokuapp.com/) 
+It has been deployed online and can be accessed through [Heroku](https://pizzamanagement.herokuapp.com/)
+
+URL link: https://pizzamanagement.herokuapp.com/
+
+NOTE: First time access to the website when it's been idle for a while may take a moment to load as it connects to the database.
 
 ## Project Description
 
